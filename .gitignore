@@ -1,0 +1,9 @@
+!.settings
+
+/test.txt
+/src/main/java/AwsCredentials.properties
+/src/main/resources/META-INF/AwsCredentials.properties
+/target
+/target
+/target
+/src/main/resources/META-INF/AwsCredentials.properties

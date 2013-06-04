@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:rabbit="http://www.springframework.org/schema/rabbit" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.springframework.org/schema/rabbit 
+http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd">
+    <rabbit:connection-factory id="connectionFactory" host="i-88b704f6" username="guest" password="guest" />
+    <rabbit:admin id="rabbitAdmin" connection-factory="connectionFactory" />
+ 
+    <bean id="jobResponseHandler"
+		class="com.gto.aws.service.ResponseHandler">
+	</bean>
+	
+	<bean id="jobResponseListener"
+		class="org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter">
+		<property name="delegate" ref="jobResponseHandler" />
+		<property name="messageConverter" ref="jobRequestConvertor"></property>
+	</bean>
+	
+  <bean id="ResponseMessageListenerContainer" class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
+    <property name="connectionFactory" ref="connectionFactory"/>
+    <property name="queueNames" value="ResponseQueue" />
+	<property name="concurrentConsumers" value="1" />
+	<property name="messageListener" ref="jobResponseListener" />
+	<property name="autoStartup" value="true" />
+  </bean>
+  
+</beans>
